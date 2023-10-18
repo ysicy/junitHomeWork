@@ -1,30 +1,43 @@
 package qaguru.qa;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$x;
 import static com.codeborne.selenide.Selenide.open;
 
-public class TestWithJunit {
+public class TestWithJunit extends  TestBase {
+
+@BeforeEach
+void setUp(){
+
+}
 
 
-    @DisplayName("В поисковой выдаче google присутствует ссылка https://bigenc.ru/ для запроса 'bigenc'")
+    @DisplayName("На странице TEST-DATA[0] в футере нажимается кнопка 'стать автором', на которой проверяется наличие заголовка TEST-DATA[1]")
     @Test
-    void successOpenRegistrationPage(){
-        open("https://www.google.com/");
-        $x("//div[contains(@class,'RNNXgb')]").click();
-        $x("//textarea[contains(@name,'q')]").setValue("bigenc").pressEnter();
-        $x("//*[@id='search']").shouldHave(text("https://bigenc.ru/"));
+    @Tag("BLOCKER")
+    void successOpenStaticPageBecomeAuthor(){
+        open("https://www.bigenc.ru/");
+        $x("//div[contains(@class,'bre-header-nav-item _button _flex-start -show-on-tablet')]")
+                .click();
+        $x("//h1[contains(@class,'bre-static-page-title')]")
+                .shouldHave(visible);
     }
 
-    @DisplayName("В поисковой выдаче bigenc присутствует поле поиска для отправления запроса 'lord' с целью перехода на первый элемент контента в поисковой выдаче")
+
+    @DisplayName("На главной странице TEST-DATA[2] в футере происходит переход на статическую страницу 'О проекте',на которой ищется ссылка на статью, происходит переход на статью и проверяется наличие кнопки TEST-DATA[3]")
     @Test
-    void successOpenSearchPageAndClickToFirstContent(){
-        open("https://www.bigenc.ru/");
-        $x("//span[contains(@class,'search')]").click();
-        $x("//input[contains(@name,'search')]").setValue("rus").pressEnter();
-        $x("//li[contains(@class,'md:tw-mx-4')]").click();
+    @Tag("BLOCKER")
+    void successOpenStaticPageAndClickToButtons(){
+        open("https://bigenc.ru/p/about-project");
+        $x("//a[contains(@href,'/c/sadovnichii-viktor-antonovich-edcd4f')]")
+                .click();
+        $x("//div[contains(@data-bre,'bre-quotes')]")
+                .shouldHave(visible);
     }
 }
