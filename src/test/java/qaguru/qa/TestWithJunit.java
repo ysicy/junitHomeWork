@@ -1,43 +1,49 @@
 package qaguru.qa;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
-import static com.codeborne.selenide.Condition.text;
+
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$x;
 import static com.codeborne.selenide.Selenide.open;
 
 public class TestWithJunit extends  TestBase {
-
-@BeforeEach
-void setUp(){
-
-}
-
-
-    @DisplayName("На странице TEST-DATA[0] в футере нажимается кнопка 'стать автором', на которой проверяется наличие заголовка TEST-DATA[1]")
-    @Test
-    @Tag("BLOCKER")
-    void successOpenStaticPageBecomeAuthor(){
+    @BeforeEach
+    void setUp(){
         open("https://www.bigenc.ru/");
-        $x("//div[contains(@class,'bre-header-nav-item _button _flex-start -show-on-tablet')]")
-                .click();
-        $x("//h1[contains(@class,'bre-static-page-title')]")
-                .shouldHave(visible);
     }
 
+    @ValueSource(strings = {"test","encyclopedia"})
+    @ParameterizedTest(name = "На странице bigenc.ru в футере нажимается кнопка 'поиск', отправляется запрос со значением и на странице результатов поиска проверяется значение")
+    @Tags({@Tag("Web"),@Tag("Search"),@Tag("UI")})
+    void successOpenStaticPageBecomeAuthor(String searchQuery){
 
-    @DisplayName("На главной странице TEST-DATA[2] в футере происходит переход на статическую страницу 'О проекте',на которой ищется ссылка на статью, происходит переход на статью и проверяется наличие кнопки TEST-DATA[3]")
+        $x("//div[contains(@class,'bre-header-nav-item _flex-start')][3]")
+                .click();
+        $x("//input[contains(@type,'text')]").setValue(searchQuery).pressEnter();
+        $x("//input[contains(@name,'search')]").shouldBe(visible);
+    }
+    //input[contains(@class,'text')]
+
+    @DisplayName("На главной странице bigenc.ru в футере происходит переход на статическую страницу 'О проекте',на которой ищется ссылка на статью, происходит переход на статью и ставится лайк")
+    @Tags({@Tag("UI")})
     @Test
-    @Tag("BLOCKER")
     void successOpenStaticPageAndClickToButtons(){
-        open("https://bigenc.ru/p/about-project");
-        $x("//a[contains(@href,'/c/sadovnichii-viktor-antonovich-edcd4f')]")
-                .click();
-        $x("//div[contains(@data-bre,'bre-quotes')]")
-                .shouldHave(visible);
+
+        $x("//li[contains(@class,'_button bre-inline-menu__item')][1]").click();
+        $x("//a[contains(@href,'/c/sadovnichii-viktor-antonovich-edcd4f')][1]").click();
+        $x("//div[contains(@data-bre,'bre-likes')]").click();
     }
+
+
+
+    @DisplayName("На главной странице bigenc.ru в футере чекаются заголовки статических страниц")
+    void successCheckStaticPage(){
+
+
+    }
+
+
 }
