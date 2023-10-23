@@ -18,7 +18,7 @@ public class TestWithJunit extends  TestBase {
     @ValueSource(strings = {"Пушкин","Пушкин (город)"})
     @ParameterizedTest(name = "На странице bigenc.ru в футере нажимается кнопка 'поиск', отправляется неполный запрос и на странице результатов поиска проверяется значение")
     @Tags({@Tag("Web"),@Tag("Search"),@Tag("UI")})
-    void successOpenStaticPageBecomeAuthor(String searchQuery){
+    void successOpenSearchPage(String searchQuery){
 
         $x("//div[contains(@class,'bre-header-nav-item _flex-start')][3]")
                 .click();
