@@ -2,10 +2,7 @@ package qaguru.qa;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.CsvFileSource;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.*;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -16,7 +13,9 @@ import static com.codeborne.selenide.Selenide.$x;
 
 public class TestWithJunit extends  TestBase {
 
-
+    @CsvSource (value = (
+        "Пушкин, Пушкин (город)"
+        ))
     @ValueSource(strings = {"Пушкин", "Пушкин (город)"})
     @ParameterizedTest(name = "На странице bigenc.ru в футере нажимается кнопка 'поиск', отправляется неполный запрос и на странице результатов поиска проверяется значение")
     @Tags({@Tag("Web"), @Tag("Search"), @Tag("UI")})
@@ -35,7 +34,7 @@ public class TestWithJunit extends  TestBase {
         );
 }
     @MethodSource("buttonsTest")
-    @DisplayName("На главной странице bigenc.ru в футере происходит переход на статическую страницу 'О проекте',на которой ищется ссылка на статью, происходит переход на статью и в меню происходят действия")
+    @ParameterizedTest(name = "На главной странице bigenc.ru в футере происходит переход на статическую страницу 'О проекте',на которой ищется ссылка на статью, происходит переход на статью и в меню происходят действия")
     @Tags({@Tag("UI"),@Tag("Buttons"),@Tag("Search")})
     @CsvFileSource(emptyValue = "buttons.csv")
     @Test
