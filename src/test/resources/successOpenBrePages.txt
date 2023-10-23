@@ -1,6 +1,6 @@
 TEST-DATA [
 ['Пушкин', 'Пушкин (горрод)'], //первый тест
-['https://bigenc.ru/', 'bre likes'] //второй тест
+['bre-quotes', 'bre likes'] //второй тест
 ]
 
 
