@@ -2,7 +2,6 @@ package qaguru.qa;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static com.codeborne.selenide.Condition.text;
@@ -30,9 +29,6 @@ public class TestWithJunit extends  TestBase {
 
     @DisplayName("На главной странице bigenc.ru в футере происходит переход на статическую страницу 'О проекте',на которой ищется ссылка на статью, происходит переход на статью и ставится лайк")
     @Tags({@Tag("UI"),@Tag("Search")})
-    @CsvSource(value = {
-            "https://bigenc.ru/, bre-likes"
-    })
     @Test
     void successOpenStaticPageAndClickToButtons(){
 
