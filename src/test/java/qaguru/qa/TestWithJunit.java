@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$x;
-import static com.codeborne.selenide.Selenide.open;
+
 
 public class TestWithJunit extends  TestBase {
 
@@ -34,10 +34,10 @@ public class TestWithJunit extends  TestBase {
                 Arguments.of(List.of("bre_quotes","bre_likes","bre-share", "bre-views"))
         );
 }
+    @MethodSource("buttonsTest")
     @DisplayName("На главной странице bigenc.ru в футере происходит переход на статическую страницу 'О проекте',на которой ищется ссылка на статью, происходит переход на статью и в меню происходят действия")
-    @Tags({@Tag("UI"),@Tag("Search")})
+    @Tags({@Tag("UI"),@Tag("Buttons"),@Tag("Search")})
     @CsvFileSource(emptyValue = "buttons.csv")
-    @MethodSource
     @Test
     void OpenStaticPageAndClickToButtonsTest(){
 
