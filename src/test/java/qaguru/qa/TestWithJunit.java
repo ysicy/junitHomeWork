@@ -43,9 +43,10 @@ public class TestWithJunit extends  TestBase {
     @Tags({@Tag("Web"), @Tag("Search"), @Tag("UI")})
     void checkingTextOnButtonsTest(String searchQuery) {
 
-        $x("//div[contains(@class,'bre-header-nav-item _flex-start')][3]").click();
-        $x("//button[contains(@class,'b-button')]").click();
-        $x("//ul[contains(@class,'search-extended__filters')]").shouldHave(text(searchQuery));
+
+            $x("//div[contains(@class,'bre-header-nav-item _flex-start')][3]").click();
+            $x("//input[contains(@type,'text')]").setValue(searchQuery).pressEnter();
+            $x("//ul[contains(@class,'search-extended__filters')]").shouldHave(text(searchQuery));
     }
 
     @ParameterizedTest(name = "Переход на странциу контента,с целью проверки кнопок под заголовком")
