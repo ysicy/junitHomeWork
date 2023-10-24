@@ -1,13 +1,15 @@
 package qaguru.qa;
 
 import com.codeborne.selenide.SelenideElement;
-import dev.failsafe.internal.util.Assert;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Tags;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.*;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Stream;
 
 import static com.codeborne.selenide.Condition.text;
@@ -19,44 +21,39 @@ public class TestWithJunit extends  TestBase {
 
 
     @ValueSource(strings = {"Пушкин", "Пушкин (город)"})
-    @ParameterizedTest(name = "На странице bigenc.ru в футере нажимается кнопка 'поиск', отправляется неполный запрос и на странице результатов поиска проверяется значение")
+    @ParameterizedTest(name = "Переход на странциу результатов поиска,с целью проверки текста в контенте")
     @Tags({@Tag("Web"), @Tag("Search"), @Tag("UI")})
     void successOpenSearchPageTest(String searchQuery) {
 
-        $x("//div[contains(@class,'bre-header-nav-item _flex-start')][3]")
-                .click();
+        $x("//div[contains(@class,'bre-header-nav-item _flex-start')][3]").click();
         $x("//input[contains(@type,'text')]").setValue(searchQuery).pressEnter();
-        System.out.println(searchQuery);
         $x("//a[contains(@class,'tw-grow')]").shouldHave(text(searchQuery));
     }
 
-    public Stream test(){
-        List<String> list = Arrays.asList("Пушкин", "Пушкин (город)");
-
-        return list.stream();
+    static Stream<Arguments> searchQueryProvider(){
+        return Stream.of(
+                Arguments.of("Области знаний"),
+                Arguments.of("Категории"),
+                Arguments.of("Теги"),
+                Arguments.of("Авторы"));
     }
 
-    @MethodSource("test")
-    @ParameterizedTest(name = "На странице bigenc.ru в футере нажимается кнопка 'поиск', отправляется неполный запрос и на странице результатов поиска проверяется значение")
+    @MethodSource("searchQueryProvider")
+    @ParameterizedTest(name = "Переход на странциу результатов поиска,с целью проверки текста в фильтрах")
     @Tags({@Tag("Web"), @Tag("Search"), @Tag("UI")})
-    void secondSuccessOpenSearchPageTest(String searchQuery) {
+    void checkingTextOnButtonsTest(String searchQuery) {
 
-        $x("//div[contains(@class,'bre-header-nav-item _flex-start')][3]")
-                .click();
-        $x("//input[contains(@type,'text')]").setValue(searchQuery).pressEnter();
-        System.out.println(searchQuery);
-        $x("//a[contains(@class,'tw-grow')]").shouldHave(text(searchQuery));
+        $x("//div[contains(@class,'bre-header-nav-item _flex-start')][3]").click();
+        $x("//button[contains(@class,'b-button')]").click();
+        $x("//ul[contains(@class,'search-extended__filters')]").shouldHave(text(searchQuery));
     }
 
-
-
-    @ParameterizedTest(name = "На главной странице bigenc.ru в футере происходит переход на статическую страницу 'О проекте',на которой ищется ссылка на статью, происходит переход на статью и в нем проверяется наличие кнопок")
+    @ParameterizedTest(name = "Переход на странциу контента,с целью проверки кнопок под заголовком")
     @Tags({@Tag("UI"),@Tag("Buttons"),@Tag("Search")})
     @CsvSource({"bre-quotes" , "bre-likes", "bre-share"})
     void openStaticPageAndClickToButtonsTest(String buttonsQuery){
 
         String type = String.format("//div[@data-bre = '%s']/span", buttonsQuery);
-
         SelenideElement types = $x(type);
         $x("//a[contains(@href,'/p/about-project')]").click();
         $x("//a[contains(@href,'/c/sadovnichii-viktor-antonovich-edcd4f')][1]").click();
@@ -64,9 +61,6 @@ public class TestWithJunit extends  TestBase {
         String attr = types.getCssValue("margin-top");
         Assertions.assertEquals("0px", attr);
     }
-
-
-
 }
 
 
